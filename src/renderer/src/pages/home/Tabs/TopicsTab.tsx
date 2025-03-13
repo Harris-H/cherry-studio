@@ -67,7 +67,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   }, [])
 
   const onClearMessages = useCallback((topic: Topic) => {
-    window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
+    // window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
     store.dispatch(setGenerating(false))
     EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES, topic)
   }, [])
@@ -98,11 +98,13 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const onDeleteTopic = useCallback(
     async (topic: Topic) => {
       await modelGenerating()
-      const index = findIndex(assistant.topics, (t) => t.id === topic.id)
-      setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? index - 1 : index + 1])
+      if (topic.id === activeTopic?.id) {
+        const index = findIndex(assistant.topics, (t) => t.id === topic.id)
+        setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? index - 1 : index + 1])
+      }
       removeTopic(topic)
     },
-    [assistant.topics, removeTopic, setActiveTopic]
+    [assistant.topics, removeTopic, setActiveTopic, activeTopic]
   )
 
   const onMoveTopic = useCallback(

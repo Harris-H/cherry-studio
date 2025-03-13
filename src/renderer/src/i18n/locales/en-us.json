@@ -505,13 +505,14 @@
       "reasoning": "Reasoning",
       "search": "Search models...",
       "stream_output": "Stream output",
-      "tool_calling": "Tool Calling",
+      "function_calling": "Function Calling",
       "type": {
         "embedding": "Embedding",
         "reasoning": "Reasoning",
         "select": "Select Model Types",
         "text": "Text",
-        "vision": "Vision"
+        "vision": "Vision",
+        "function_calling": "Function Calling"
       },
       "vision": "Vision",
       "websearch": "WebSearch"
@@ -785,6 +786,7 @@
         "active": "Active",
         "addServer": "Add Server",
         "addSuccess": "Server added successfully",
+        "addError": "Failed to add server",
         "args": "Arguments",
         "argsTooltip": "Each argument on a new line",
         "command": "Command",
@@ -793,6 +795,7 @@
         "confirmDelete": "Delete Server",
         "confirmDeleteMessage": "Are you sure you want to delete the server?",
         "deleteSuccess": "Server deleted successfully",
+        "deleteError": "Failed to delete server",
         "description": "Description",
         "duplicateName": "A server with this name already exists",
         "editServer": "Edit Server",
@@ -806,7 +809,9 @@
         "title": "MCP Servers",
         "type": "Type",
         "updateSuccess": "Server updated successfully",
-        "url": "URL"
+        "updateError": "Failed to update server",
+        "url": "URL",
+        "toggleError": "Toggle failed"
       },
       "messages.divider": "Show divider between messages",
       "messages.grid_columns": "Message grid display columns",
