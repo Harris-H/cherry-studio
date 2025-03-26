@@ -66,6 +66,7 @@
     "@google/generative-ai": "^0.21.0",
     "@langchain/community": "^0.3.36",
     "@modelcontextprotocol/sdk": "patch:@modelcontextprotocol/sdk@npm%3A1.6.1#~/.yarn/patches/@modelcontextprotocol-sdk-npm-1.6.1-b46313efe7.patch",
+    "@monaco-editor/react": "^4.7.0",
     "@notionhq/client": "^2.2.15",
     "@tryfabric/martian": "^1.2.4",
     "@types/react-infinite-scroll-component": "^5.0.0",
