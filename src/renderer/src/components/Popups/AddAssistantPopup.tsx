@@ -219,6 +219,7 @@ const AgentItem = styled.div`
   margin-bottom: 8px;
   cursor: pointer;
   overflow: hidden;
+  border: 1px solid transparent;
   &.default {
     background-color: var(--color-background-mute);
   }
