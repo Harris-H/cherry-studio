@@ -248,7 +248,7 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
           />
         </>
       )}
-      {formattedCitations && (
+      {formattedCitations && !message?.metadata?.webSearch && (
         <CitationsContainer>
           <CitationsHeader onClick={() => setCitationsExpanded(!citationsExpanded)}>
             <CitationsTitle>
@@ -264,11 +264,10 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
           {citationsExpanded && (
             <CitationsList
               citations={formattedCitations.map((citation) => ({
-                number: citation.number,
-                url: citation.url,
-                hostname: citation.hostname,
+                ...citation,
                 showFavicon: isWebCitation
               }))}
+              hideTitle={true}
             />
           )}
         </CitationsContainer>
@@ -286,14 +285,15 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
               <RightOutlined style={{ fontSize: '12px' }} />
             )}
           </CitationsHeader>
-          {webSearchExpanded && (
+          {webSearchExpanded && message.metadata?.webSearch?.results && (
             <CitationsList
               citations={message.metadata.webSearch.results.map((result, index) => ({
                 number: index + 1,
                 url: result.url,
-                title: result.title,
+                title: result.title || (result.url ? new URL(result.url).hostname : ''),
                 showFavicon: true
               }))}
+              hideTitle={true}
             />
           )}
         </CitationsContainer>
@@ -370,22 +370,6 @@ const CitationsTitle = styled.div`
   display: flex;
   align-items: center;
 `
-
-const CitationLink = styled.a`
-  font-size: 14px;
-  line-height: 1.6;
-  text-decoration: none;
-  color: var(--color-text-1);
-
-  .hostname {
-    color: var(--color-link);
-  }
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
 const SearchingText = styled.div`
   font-size: 14px;
   line-height: 1.6;
