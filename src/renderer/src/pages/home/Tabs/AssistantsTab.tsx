@@ -1,13 +1,12 @@
-import { PlusOutlined, SortAscendingOutlined, SortDescendingOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import * as tinyPinyin from 'tiny-pinyin'
 
 import AssistantItem from './AssistantItem'
 
@@ -26,9 +25,9 @@ const Assistants: FC<AssistantsTabProps> = ({
 }) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const [dragging, setDragging] = useState(false)
-  const [isAscending, setIsAscending] = useState(true) // 排序方向状态
   const { addAgent } = useAgents()
   const { t } = useTranslation()
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const onDelete = useCallback(
     (assistant: Assistant) => {
@@ -42,35 +41,11 @@ const Assistants: FC<AssistantsTabProps> = ({
     [activeAssistant, assistants, removeAssistant, setActiveAssistant, onCreateDefaultAssistant]
   )
 
-  const sortByPinyin = useCallback(() => {
-    const sorted = [...assistants].sort((a, b) => {
-      const pinyinA = tinyPinyin.convertToPinyin(a.name, '', true)
-      const pinyinB = tinyPinyin.convertToPinyin(b.name, '', true)
-      // 根据排序方向决定比较顺序
-      return isAscending ? pinyinA.localeCompare(pinyinB) : pinyinB.localeCompare(pinyinA)
-    })
-
-    updateAssistants(sorted)
-    // 切换排序方向
-    setIsAscending(!isAscending)
-  }, [assistants, updateAssistants, isAscending])
-
   return (
-    <Container className="assistants-tab">
-      <TabHeader>
-        <SortButton
-          onClick={sortByPinyin}
-          title={isAscending ? t('common.sort.pinyin.asc') : t('common.sort.pinyin.desc')}>
-          {isAscending ? <SortAscendingOutlined /> : <SortDescendingOutlined />}
-        </SortButton>
-      </TabHeader>
+    <Container className="assistants-tab" ref={containerRef}>
       <DragableList
         list={assistants}
-        onUpdate={(list) => {
-          updateAssistants(list)
-          // 拖拽后重置排序方向为升序
-          setIsAscending(true)
-        }}
+        onUpdate={updateAssistants}
         style={{ paddingBottom: dragging ? '34px' : 0 }}
         onDragStart={() => setDragging(true)}
         onDragEnd={() => setDragging(false)}>
@@ -105,31 +80,6 @@ const Container = styled(Scrollbar)`
   display: flex;
   flex-direction: column;
   padding: 10px;
-`
-
-const TabHeader = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 8px;
-  padding: 0 4px;
-`
-
-const SortButton = styled.button`
-  background: transparent;
-  border: none;
-  color: var(--color-text-2);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background-color: var(--color-background-soft);
-    color: var(--color-text);
-  }
 `
 
 const AssistantAddItem = styled.div`
