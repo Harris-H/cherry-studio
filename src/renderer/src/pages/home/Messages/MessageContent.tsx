@@ -1,10 +1,4 @@
-import {
-  DownOutlined,
-  InfoCircleOutlined,
-  RightOutlined,
-  SyncOutlined,
-  TranslationOutlined
-} from '@ant-design/icons'
+import { DownOutlined, InfoCircleOutlined, LeftOutlined, SyncOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isOpenAIWebSearch } from '@renderer/config/models'
 import { getModelUniqId } from '@renderer/services/ModelService'
 import { Message, Model } from '@renderer/types'
@@ -93,7 +87,7 @@ const MessageContent: React.FC<Props> = ({ message: _message, model, onMessageUp
   const formattedCitations = useMemo(() => {
     if (!message.metadata?.citations?.length && !message.metadata?.annotations?.length) return null
 
-    let citations: any[] = []
+    let citations: any[]
 
     if (model && isOpenAIWebSearch(model)) {
       citations =
@@ -190,7 +184,7 @@ const MessageContent: React.FC<Props> = ({ message: _message, model, onMessageUp
     // Convert [n] format to superscript numbers and make them clickable
     // Use <sup> tag for superscript and make it a link with citation data
     if (message.metadata?.webSearch) {
-      content = content.replace(/\[\[(\d+)\]\]|\[(\d+)\]/g, (match, num1, num2) => {
+      content = content.replace(/\[\[(\d+)]]|\[(\d+)]/g, (match, num1, num2) => {
         const num = num1 || num2
         const index = parseInt(num) - 1
         if (index >= 0 && index < citations.length) {
@@ -201,7 +195,7 @@ const MessageContent: React.FC<Props> = ({ message: _message, model, onMessageUp
         return match
       })
     } else {
-      content = content.replace(/\[<sup>(\d+)<\/sup>\]\(([^)]+)\)/g, (_, num, url) => {
+      content = content.replace(/\[<sup>(\d+)<\/sup>]\(([^)]+)\)/g, (_, num, url) => {
         const citationData = url ? encodeHTML(JSON.stringify(citationsData.get(url) || { url })) : null
         return `[<sup data-citation='${citationData}'>${num}</sup>](${url})`
       })
@@ -297,7 +291,7 @@ const MessageContent: React.FC<Props> = ({ message: _message, model, onMessageUp
             {citationsExpanded ? (
               <DownOutlined style={{ fontSize: '12px' }} />
             ) : (
-              <RightOutlined style={{ fontSize: '12px' }} />
+              <LeftOutlined style={{ fontSize: '12px' }} />
             )}
           </CitationsHeader>
           {citationsExpanded && (
@@ -321,7 +315,7 @@ const MessageContent: React.FC<Props> = ({ message: _message, model, onMessageUp
             {webSearchExpanded ? (
               <DownOutlined style={{ fontSize: '12px' }} />
             ) : (
-              <RightOutlined style={{ fontSize: '12px' }} />
+              <LeftOutlined style={{ fontSize: '12px' }} />
             )}
           </CitationsHeader>
           {webSearchExpanded && message.metadata?.webSearch?.results && (
