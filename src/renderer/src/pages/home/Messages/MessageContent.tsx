@@ -2,7 +2,6 @@ import {
   DownOutlined,
   InfoCircleOutlined,
   RightOutlined,
-  SearchOutlined,
   SyncOutlined,
   TranslationOutlined
 } from '@ant-design/icons'
