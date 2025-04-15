@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@renderer/store'
-import { selectStreamMessage, updateMessage } from '@renderer/store/messages'
+import { useAppSelector } from '@renderer/store'
+import { selectStreamMessage } from '@renderer/store/messages'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { memo } from 'react'
 import styled from 'styled-components'
@@ -50,7 +50,6 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   // 在hooks调用后进行条件判断
   const isStreaming = !!(streamMessage && streamMessage.id === _message.id)
   const message = isStreaming ? streamMessage : regularMessage
-
   return (
     <MessageStreamContainer>
       <MessageItem
