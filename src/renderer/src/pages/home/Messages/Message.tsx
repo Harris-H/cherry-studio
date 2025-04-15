@@ -39,8 +39,7 @@ const MessageItem: FC<Props> = ({
   hidePresetMessages,
   isGrouped,
   isStreaming = false,
-  style,
-  onSetMessages
+  style
 }) => {
   const { t } = useTranslation()
   const { assistant, setModel } = useAssistant(message.assistantId)
@@ -51,15 +50,6 @@ const MessageItem: FC<Props> = ({
   const [contextMenuPosition, setContextMenuPosition] = useState<{ x: number; y: number } | null>(null)
   const [selectedQuoteText, setSelectedQuoteText] = useState<string>('')
   const [selectedText, setSelectedText] = useState<string>('')
-
-  const updateMessage = useCallback(
-    (updates: Partial<Message>) => {
-      if (onSetMessages) {
-        onSetMessages((prev) => prev.map((msg) => (msg.id === message.id ? { ...msg, ...updates } : msg)))
-      }
-    },
-    [message.id, onSetMessages]
-  )
 
   const isLastMessage = index === 0
   const isAssistantMessage = message.role === 'assistant'
@@ -154,7 +144,7 @@ const MessageItem: FC<Props> = ({
         className="message-content-container"
         style={{ fontFamily, fontSize, background: messageBackground, overflowY: 'visible' }}>
         <MessageErrorBoundary>
-          <MessageContent message={message} model={model} onMessageUpdate={updateMessage} />
+          <MessageContent message={message} model={model} />
         </MessageErrorBoundary>
         {showMenubar && (
           <MessageFooter
